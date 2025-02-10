@@ -1,0 +1,238 @@
+#!/bin/bash
+
+# Add this function to your .bashrc file or source it
+
+rm_dir() {
+
+    # Function to display help
+    display_help() {
+        echo "Usage: rm_dir [OPTION]... [PSLOT]..."
+        echo "Remove directories, check the age of directories, or calculate the size of directories of experiments."
+        echo
+        echo "Options:"
+        echo "  -h, --help    display this help and exit"
+        echo "  -size         calculate the size of directories for the given PSLOT (experiment)"
+        echo "  -age          display the age of directories for the given PSLOT (experiment)"
+        echo "  -remove       remove directories for the given PSLOT (experiment)"
+        echo
+        echo "If no arguments are provided, the script will check the age of directories of experiments."
+        echo "If PSLOT is provided as an argument, the script will remove the directories of experiments."
+    }
+
+    # Check for help option
+    if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+        display_help
+        return 0
+    fi
+
+    # Function to remove a directory if it exists
+    remove_directory() {
+        local dir=$1
+        if [ -d "$dir" ]; then
+            echo "Removing directory: $dir"
+            rm -rf "$dir"
+            echo "Removed directory"
+        else
+            echo "Directory does not exist: $dir"
+        fi
+    }
+
+    # Get the hostname and convert it to lowercase
+    hostname=$(hostname | tr '[:upper:]' '[:lower:]')
+    directories=()
+
+    if [[ "$hostname" =~ "hfe" ]]; then
+        directories=(
+            "/scratch1/NCEPDEV/global/${USER}/RUNTESTS/EXPDIR"
+            "/scratch1/NCEPDEV/global/${USER}/RUNTESTS/COMROOT"
+            "/scratch1/NCEPDEV/stmp2/${USER}/RUNDIRS" # ATARDIR
+        )
+    elif [[ "$hostname" =~ "hercules" || "$hostname" =~ "orion" ]]; then
+        directories=(
+            "/work2/noaa/global/${USER}/RUNTESTS/EXPDIR"
+            "/work2/noaa/global/${USER}/RUNTESTS/COMROOT"
+            "/work/noaa/global/${USER}/archive_rotdir" # ATARDIR
+            "/work/noaa/global/${USER}/archive" # ATARDIR
+        )
+    else
+        echo "You are not on 'Hera', 'Hercules', or 'Orion'. Operation cancelled."
+        return 1
+    fi
+
+    # Check if the first argument is '-size'
+    if [ "$1" == "-size" ]; then
+        if [ "$#" -ne 2 ]; then
+            echo "Error: Please provide an experiment name."
+            return 1
+        fi
+        pslot=$2
+        total_size=0
+        all_dirs_missing=true
+        for dir in "${directories[@]}"; do
+            if [ -d "$dir/$pslot" ]; then
+                all_dirs_missing=false
+                # Calculate the size of the directory in KB and add to total size
+                dir_size=$(du -sk "$dir/$pslot" | cut -f1)
+                total_size=$((total_size + dir_size))
+            fi
+        done
+
+        if $all_dirs_missing; then
+            echo "Experiment ${pslot} does not exist."
+            return 1
+        fi
+
+        # Convert total size to GB
+        total_size_gb=$(echo "scale=2; $total_size/1024/1024" | bc)
+        echo "Total size of experiment ${pslot}: ${total_size_gb} GB"
+        return 0
+    fi
+
+    # Check if the first argument is '-age'
+    if [ "$1" == "-age" ]; then
+        if [ "$#" -eq 1 ]; then
+            # No experiment name provided, perform the same process as when no arguments are given
+            set --
+        else
+            pslot=$2
+            all_dirs_missing=true
+            pslot_displayed=false
+
+            for dir in "${directories[@]}"; do
+                if [ -d "$dir/$pslot" ]; then
+                    all_dirs_missing=false
+                    if ! $pslot_displayed; then
+                        # Find the last modified date of the folder
+                        if find "$dir/$pslot" -maxdepth 0 -mtime -3 | grep -q .; then
+                            echo "Experiment ${pslot} is a few days old."
+                        elif find "$dir/$pslot" -maxdepth 0 -mtime -7 | grep -q .; then
+                            echo "Experiment ${pslot} is a week old."
+                        elif find "$dir/$pslot" -maxdepth 0 -mtime -30 | grep -q .; then
+                            echo "Experiment ${pslot} is a month old."
+                        else
+                            echo "Experiment ${pslot} is more than a month old."
+                        fi
+                        pslot_displayed=true
+                    fi
+                fi
+            done
+
+            if $all_dirs_missing; then
+                echo "Experiment ${pslot} does not exist."
+                return 1
+            fi
+            return 0
+        fi
+    fi
+
+    # Check if no arguments are provided or if the first argument is '-age'
+    if [ "$#" -eq 0 ]; then
+        # No argument provided, check the age of directories in the specified directories
+
+        # Initialize counters and lists
+        few_days_count=0
+        week_count=0
+        month_count=0
+        more_than_month_count=0
+
+        few_days_list=()
+        week_list=()
+        month_list=()
+        more_than_month_list=()
+
+        # Function to calculate the age of directories
+        calculate_age() {
+            local dir=$1
+            if [ -d "$dir" ]; then
+                base_name=$(basename "$dir")
+                # Check the age of the directory and increment the appropriate counter and list
+                if find "$dir" -maxdepth 0 -mtime -3 | grep -q .; then
+                    few_days_count=$((few_days_count + 1))
+                    few_days_list+=("$base_name")
+                elif find "$dir" -maxdepth 0 -mtime -7 | grep -q .; then
+                    week_count=$((week_count + 1))
+                    week_list+=("$base_name")
+                elif find "$dir" -maxdepth 0 -mtime -30 | grep -q .; then
+                    month_count=$((month_count + 1))
+                    month_list+=("$base_name")
+                else
+                    more_than_month_count=$((more_than_month_count + 1))
+                    more_than_month_list+=("$base_name")
+                fi
+            fi
+        }
+
+        # Check the age of directories in the list
+        declare -A displayed_pslots
+        for dir in "${directories[@]}"; do
+            for subdir in "$dir"/*; do
+                pslot=$(basename "$subdir")
+                if [ -z "${displayed_pslots[$pslot]}" ]; then
+                    calculate_age "$subdir"
+                    displayed_pslots[$pslot]=1
+                fi
+            done
+        done
+
+        # Write messages based on the counts and lists
+        if [ "$few_days_count" -gt 0 ]; then
+            echo "Experiments modified in the last few days:"
+            printf '%s\n' "${few_days_list[@]}"
+        fi
+        if [ "$week_count" -gt 0 ]; then
+            echo "Experiments modified in the last week:"
+            printf '%s\n' "${week_list[@]}"
+        fi
+        if [ "$month_count" -gt 0 ]; then
+            echo "Experiments modified in the last month:"
+            printf '%s\n' "${month_list[@]}"
+        fi
+        if [ "$more_than_month_count" -gt 0 ]; then
+            echo "Experiments modified more than a month ago:"
+            printf '%s\n' "${more_than_month_list[@]}"
+        fi
+        if [ "$few_days_count" -eq 0 ] && [ "$week_count" -eq 0 ] && [ "$month_count" -eq 0 ] && [ "$more_than_month_count" -eq 0 ]; then
+            echo "There are no experiments in directories."
+        fi
+    else
+        # Check if the first argument is '-remove' followed by the experiment name
+        if [ "$1" == "-remove" ]; then
+            if [ "$#" -ne 2 ]; then
+                echo "Error: Please provide an experiment name."
+                return 1
+            fi
+            pslot=$2
+        else
+            # Get the arbitrary folder name from the command line argument
+            pslot=$1
+        fi
+
+        all_dirs_missing=true
+        for dir in "${directories[@]}"; do
+            if [ -d "$dir/$pslot" ]; then
+                all_dirs_missing=false
+                break
+            fi
+        done
+
+        if $all_dirs_missing; then
+            echo "Experiment ${pslot} does not exist."
+            return 1
+        fi
+
+        echo "If you want to delete the experiment ${pslot}, press Y and then Enter (or N to cancel):"
+        read -r confirmation
+        if [ "$confirmation" == "N" ]; then
+            echo "Operation cancelled."
+        return 1
+        fi
+
+        for dir in "${directories[@]}"; do
+            [ -n "$dir/$pslot" ] && remove_directory "$dir/$pslot"
+        done
+        echo "Process Complete!"
+    fi
+}
+
+# Save and close your .bashrc file, then source it to apply the changes
+# source ~/.bashrc
