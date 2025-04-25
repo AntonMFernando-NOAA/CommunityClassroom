@@ -9,9 +9,11 @@ base_dir="/u/anton.fernando/enkfgdas.${ymd}"
 # Loop through cycles
 for hour in "${cycles[@]}"; do
   # Loop through members
-  for mem in $(seq -w 0 80); do
+  for mem in $(seq 0 80); do
+    # Zero-pad the member folder name to three digits
+    mem_folder=$(printf "mem%03d" "$mem")
     # Construct the directory path
-    mem_dir="${base_dir}/${hour}/mem${mem}/model/atmos/restart"
+    mem_dir="${base_dir}/${hour}/${mem_folder}/model/atmos/restart"
     # Create the directory if it doesn't exist
     mkdir -p "${mem_dir}"
     
