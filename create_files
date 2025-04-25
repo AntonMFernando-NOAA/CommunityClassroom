@@ -19,7 +19,12 @@ for hour in "${cycles[@]}"; do
     
     # Loop through files and create them
     for file in "${files[@]}"; do
+      # Create the base file
       touch "${mem_dir}/${ymd}.210000.${file}"
+      # Create the tile files
+      for tile in $(seq 1 6); do
+        touch "${mem_dir}/${ymd}.210000.${file}.tile${tile}"
+      done
     done
   done
 done
