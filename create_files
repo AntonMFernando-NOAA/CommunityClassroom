@@ -4,7 +4,7 @@
 ymd="20241117"
 cycles=("00" "06" "12" "18")
 files=("fv_core.res" "fv_srf_wnd.res" "coupler.res" "phy_data" "sfc_data")
-base_dir="/u/anton.fernando/enkfgdas.${ymd}"
+base_dir="/scratch1/NCEPDEV/global/Anton.Fernando/enkfgdas.${ymd}"
 
 # Loop through cycles
 for hour in "${cycles[@]}"; do
