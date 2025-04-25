@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# Variables
+ymd="2024117"
+cycles=("00" "06" "12" "18")
+files=("fv_core.res" "fv_srf_wnd.res" "coupler.res" "phy_data" "sfc_data")
+base_dir="/u/anton.fernando/enkfgdas.${ymd}"
+
+# Loop through cycles
+for hour in "${cycles[@]}"; do
+  # Loop through members
+  for mem in $(seq -w 0 80); do
+    # Construct the directory path
+    mem_dir="${base_dir}/${hour}/mem${mem}/model/atmos/restart"
+    # Create the directory if it doesn't exist
+    mkdir -p "${mem_dir}"
+    
+    # Loop through files and create them
+    for file in "${files[@]}"; do
+      touch "${mem_dir}/${ymd}.210000.${file}"
+    done
+  done
+done
+
+echo "Empty files created successfully in ${base_dir}."
