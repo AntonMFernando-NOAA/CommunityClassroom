@@ -1,5 +1,5 @@
 #!/bin/bash
-
+#restart files
 # Variables
 ymd="20241117"
 cycles=("00" "06" "12" "18")
@@ -30,7 +30,7 @@ for hour in "${cycles[@]}"; do
 done
 
 echo "Empty files created successfully in ${base_dir}."
-
+#increment files
 ymd="2024116"
 cycles=("00" "06" "12" "18")
 files=("ratmi003.nc" "ratmi009.nc" "ratminc.nc")
