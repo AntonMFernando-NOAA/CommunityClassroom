@@ -49,7 +49,7 @@ for hour in "${cycles[@]}"; do
     
     # Loop through files and create them
     for file in "${files[@]}"; do
-      touch "${mem_dir}/enkfgfs.t${hour}.z.${file}"
+      touch "${mem_dir}/enkfgfs.t${hour}z.${file}"
     done
   done
 done
