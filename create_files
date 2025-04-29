@@ -31,7 +31,7 @@ done
 
 echo "Empty files created successfully in ${base_dir}."
 #increment files
-ymd="2024116"
+ymd="20241117"
 cycles=("00" "06" "12" "18")
 files=("ratmi003.nc" "ratmi009.nc" "ratminc.nc")
 base_dir="/lfs/h2/emc/global/noscrub/anton.fernando/enkfgfs.${ymd}"
