@@ -4,7 +4,7 @@
 ymd="20241117"
 cycles=("00" "06" "12" "18")
 files=("fv_core.res" "fv_srf_wnd.res" "coupler.res" "phy_data" "sfc_data")
-base_dir="/scratch1/NCEPDEV/global/Anton.Fernando/enkfgdas.${ymd}"
+base_dir="/lfs/h2/emc/global/noscrub/anton.fernando/enkfgdas.${ymd}"
 
 # Loop through cycles
 for hour in "${cycles[@]}"; do
@@ -25,6 +25,31 @@ for hour in "${cycles[@]}"; do
       for tile in $(seq 1 6); do
         touch "${mem_dir}/${ymd}.210000.${file}.tile${tile}"
       done
+    done
+  done
+done
+
+echo "Empty files created successfully in ${base_dir}."
+
+ymd="2024116"
+cycles=("00" "06" "12" "18")
+files=("ratmi003.nc" "ratmi009.nc" "ratminc.nc")
+base_dir="/lfs/h2/emc/global/noscrub/anton.fernando/enkfgfs.${ymd}"
+
+# Loop through cycles
+for hour in "${cycles[@]}"; do
+  # Loop through members
+  for mem in $(seq 0 80); do
+    # Zero-pad the member folder name to three digits
+    mem_folder=$(printf "mem%03d" "$mem")
+    # Construct the directory path
+    mem_dir="${base_dir}/${hour}/${mem_folder}/analysis/atmos"
+    # Create the directory if it doesn't exist
+    mkdir -p "${mem_dir}"
+    
+    # Loop through files and create them
+    for file in "${files[@]}"; do
+      touch "${mem_dir}/enkfgfs.t${hour}.z.${file}"
     done
   done
 done
