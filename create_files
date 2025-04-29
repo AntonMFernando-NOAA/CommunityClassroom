@@ -1,7 +1,7 @@
 #!/bin/bash
 #restart files
 # Variables
-ymd="20241116"
+ymd="20241117"
 cycles=("00" "06" "12" "18")
 files=("fv_core.res" "fv_srf_wnd.res" "coupler.res" "phy_data" "sfc_data")
 base_dir="/lfs/h2/emc/global/noscrub/anton.fernando/enkfgdas.${ymd}"
@@ -31,7 +31,7 @@ done
 
 echo "Empty files created successfully in ${base_dir}."
 #increment files
-ymd="2024117"
+ymd="2024116"
 cycles=("00" "06" "12" "18")
 files=("ratmi003.nc" "ratmi009.nc" "ratminc.nc")
 base_dir="/lfs/h2/emc/global/noscrub/anton.fernando/enkfgfs.${ymd}"
