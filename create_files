@@ -1,57 +1,115 @@
 #!/bin/bash
-#restart files
-# Variables
-ymd="20241116"
-cycles=("00" "06" "12" "18")
-files=("fv_core.res" "fv_srf_wnd.res" "coupler.res" "phy_data" "sfc_data")
-base_dir="/lfs/h2/emc/global/noscrub/anton.fernando/enkfgdas.${ymd}"
 
-# Loop through cycles
-for hour in "${cycles[@]}"; do
-  # Loop through members
-  for mem in $(seq 0 80); do
-    # Zero-pad the member folder name to three digits
-    mem_folder=$(printf "mem%03d" "$mem")
-    # Construct the directory path
-    mem_dir="${base_dir}/${hour}/${mem_folder}/model/atmos/restart"
-    # Create the directory if it doesn't exist
-    mkdir -p "${mem_dir}"
-    
-    # Loop through files and create them
-    for file in "${files[@]}"; do
-      # Create the base file
-      touch "${mem_dir}/${ymd}.210000.${file}"
-      # Create the tile files
-      for tile in $(seq 1 6); do
-        touch "${mem_dir}/${ymd}.210000.${file}.tile${tile}"
+# Variables
+ymd_list=("20241116" "20241117")
+cycles=("00" "06" "12" "18")
+
+# Restart files
+restart_files=("fv_core.res" "fv_srf_wnd.res" "coupler.res" "phy_data" "sfc_data")
+
+for ymd in "${ymd_list[@]}"; do
+  base_dir="/lfs/h2/emc/global/noscrub/anton.fernando/enkfgdas.${ymd}"
+
+  # Loop through cycles
+  for hour in "${cycles[@]}"; do
+    # Loop through members
+    for mem in $(seq 0 80); do
+      # Zero-pad the member folder name to three digits
+      mem_folder=$(printf "mem%03d" "$mem")
+      # Construct the directory path
+      mem_dir="${base_dir}/${hour}/${mem_folder}/model/atmos/restart"
+      # Create the directory if it doesn't exist
+      mkdir -p "${mem_dir}"
+      
+      # Loop through files and create them
+      for file in "${restart_files[@]}"; do
+        # Create the base file
+        touch "${mem_dir}/${ymd}.210000.${file}"
+        # Create the tile files
+        for tile in $(seq 1 6); do
+          touch "${mem_dir}/${ymd}.210000.${file}.tile${tile}"
+        done
       done
     done
   done
 done
 
-echo "Empty files created successfully in ${base_dir}."
-#increment files
-ymd="20241116"
-cycles=("00" "06" "12" "18")
-files=("ratmi003.nc" "ratmi009.nc" "ratminc.nc")
-base_dir="/lfs/h2/emc/global/noscrub/anton.fernando/enkfgfs.${ymd}"
+echo "Empty restart files created successfully."
 
-# Loop through cycles
-for hour in "${cycles[@]}"; do
-  # Loop through members
-  for mem in $(seq 0 80); do
-    # Zero-pad the member folder name to three digits
-    mem_folder=$(printf "mem%03d" "$mem")
-    # Construct the directory path
-    mem_dir="${base_dir}/${hour}/${mem_folder}/analysis/atmos"
-    # Create the directory if it doesn't exist
-    mkdir -p "${mem_dir}"
-    
-    # Loop through files and create them
-    for file in "${files[@]}"; do
-      touch "${mem_dir}/enkfgfs.t${hour}z.${file}"
+# Increment files (atmos)
+increment_files=("ratmi003.nc" "ratmi009.nc" "ratminc.nc")
+
+for ymd in "${ymd_list[@]}"; do
+  base_dir="/lfs/h2/emc/global/noscrub/anton.fernando/enkfgfs.${ymd}"
+
+  # Loop through cycles
+  for hour in "${cycles[@]}"; do
+    # Loop through members
+    for mem in $(seq 0 80); do
+      # Zero-pad the member folder name to three digits
+      mem_folder=$(printf "mem%03d" "$mem")
+      # Construct the directory path
+      mem_dir="${base_dir}/${hour}/${mem_folder}/analysis/atmos"
+      # Create the directory if it doesn't exist
+      mkdir -p "${mem_dir}"
+      
+      # Loop through files and create them
+      for file in "${increment_files[@]}"; do
+        touch "${mem_dir}/enkfgfs.t${hour}z.${file}"
+      done
     done
   done
 done
 
-echo "Empty files created successfully in ${base_dir}."
+echo "Empty atmos increment files created successfully."
+
+# Ocean files
+ocean_files=("MOM.res.nc" "MOM.res_1.nc" "MOM.res_2.nc" "MOM.res_3.nc")
+
+for ymd in "${ymd_list[@]}"; do
+  base_dir="/lfs/h2/emc/global/noscrub/anton.fernando/enkfgfs.${ymd}"
+
+  # Loop through cycles
+  for hour in "${cycles[@]}"; do
+    # Loop through members
+    for mem in $(seq 0 80); do
+      # Zero-pad the member folder name to three digits
+      mem_folder=$(printf "mem%03d" "$mem")
+      # Construct the directory paths
+      mem_dir="${base_dir}/${hour}/${mem_folder}/model/ocean/restart"
+      mem_dir_inc="${base_dir}/${hour}/${mem_folder}/analysis/ocean"
+      # Create the directories if they don't exist
+      mkdir -p "${mem_dir}"
+      mkdir -p "${mem_dir_inc}"
+      touch "${mem_dir_inc}/enkfgfs.t${hour}z.ocninc.nc"
+      
+      # Loop through files and create them
+      for file in "${ocean_files[@]}"; do
+        touch "${mem_dir}/${ymd}.030000.${file}"
+      done
+    done
+  done
+done
+
+echo "Empty ocean files created successfully."
+
+# Ice files
+for ymd in "${ymd_list[@]}"; do
+  base_dir="/lfs/h2/emc/global/noscrub/anton.fernando/enkfgfs.${ymd}"
+
+  # Loop through cycles
+  for hour in "${cycles[@]}"; do
+    # Loop through members
+    for mem in $(seq 0 80); do
+      # Zero-pad the member folder name to three digits
+      mem_folder=$(printf "mem%03d" "$mem")
+      # Construct the directory path
+      mem_dir="${base_dir}/${hour}/${mem_folder}/analysis/ice"
+      # Create the directory if it doesn't exist
+      mkdir -p "${mem_dir}"
+      touch "${mem_dir}/${ymd}.030000.cice_model_anl.res.nc"
+    done
+  done
+done
+
+echo "Empty ice files created successfully."
