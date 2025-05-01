@@ -67,7 +67,7 @@ echo "Empty atmos increment files created successfully."
 ocean_files=("MOM.res.nc" "MOM.res_1.nc" "MOM.res_2.nc" "MOM.res_3.nc")
 
 for ymd in "${ymd_list[@]}"; do
-  base_dir="/lfs/h2/emc/global/noscrub/anton.fernando/enkfgfs.${ymd}"
+  base_dir="/lfs/h2/emc/global/noscrub/anton.fernando/enkfgdas.${ymd}"
 
   # Loop through cycles
   for hour in "${cycles[@]}"; do
