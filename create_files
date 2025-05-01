@@ -34,7 +34,7 @@ for ymd in "${ymd_list[@]}"; do
   done
 done
 
-echo "Empty restart files created successfully."
+echo "Empty atmos restart files created successfully."
 
 # Increment files (atmos)
 increment_files=("ratmi003.nc" "ratmi009.nc" "ratminc.nc")
