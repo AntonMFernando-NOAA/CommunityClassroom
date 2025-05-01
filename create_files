@@ -68,6 +68,7 @@ ocean_files=("MOM.res.nc" "MOM.res_1.nc" "MOM.res_2.nc" "MOM.res_3.nc")
 
 for ymd in "${ymd_list[@]}"; do
   base_dir="/lfs/h2/emc/global/noscrub/anton.fernando/enkfgdas.${ymd}"
+  base_dir_inc="/lfs/h2/emc/global/noscrub/anton.fernando/enkfgfs.${ymd}"
 
   # Loop through cycles
   for hour in "${cycles[@]}"; do
@@ -77,7 +78,7 @@ for ymd in "${ymd_list[@]}"; do
       mem_folder=$(printf "mem%03d" "$mem")
       # Construct the directory paths
       mem_dir="${base_dir}/${hour}/${mem_folder}/model/ocean/restart"
-      mem_dir_inc="${base_dir}/${hour}/${mem_folder}/analysis/ocean"
+      mem_dir_inc="${base_dir_inc}/${hour}/${mem_folder}/analysis/ocean"
       # Create the directories if they don't exist
       mkdir -p "${mem_dir}"
       mkdir -p "${mem_dir_inc}"
