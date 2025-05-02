@@ -108,7 +108,7 @@ for ymd in "${ymd_list[@]}"; do
       mem_dir="${base_dir}/${hour}/${mem_folder}/analysis/ice"
       # Create the directory if it doesn't exist
       mkdir -p "${mem_dir}"
-      touch "${mem_dir}/${ymd}.030000.cice_model_anl.res.nc"
+      touch "${mem_dir}/${ymd}.210000.cice_model_anl.res.nc"
     done
   done
 done
