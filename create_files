@@ -17,7 +17,7 @@ for ymd in "${ymd_list[@]}"; do
   for hour in "${cycles[@]}"; do
     mkdir -p "${base_dir_control_DIa}/${hour}/analysis/atmos"
     mkdir -p "${base_dir_control_DIb}/${hour}/analysis/atmos"
-    touch "${base_dir_control_DIa}/${hour}/gdas.t${hour}z.atma003.ensres.nc "
+    touch "${base_dir_control_DIa}/${hour}/gdas.t${hour}z.atma003.ensres.nc"
     touch "${base_dir_control_DIb}/${hour}/gfs.t${hour}z.atminc.nc"
     touch "${base_dir_control_DIb}/${hour}/gfs.t${hour}z.atmanl.nc"
     # Loop through members
