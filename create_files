@@ -84,7 +84,7 @@ for ymd in "${ymd_list[@]}"; do
   for hour in "${cycles[@]}"; do
     # Loop through members
     mem_dir_control_restart="${base_dir_control_restart}/${hour}/model/ocean/restart"
-    mem_dir_control_increment="${base_dir_inc_control_increment}/${hour}/analysis/ocean"
+    mem_dir_control_increment="${base_dir_control_increment}/${hour}/analysis/ocean"
     mkdir -p "${mem_dir_control_restart}"
     mkdir -p "${mem_dir_control_increment}"
     touch "${mem_dir_control_increment}/gfs.t${hour}z.ocninc.nc"
