@@ -10,6 +10,9 @@ ocean_files=("MOM.res.nc" "MOM.res_1.nc" "MOM.res_2.nc" "MOM.res_3.nc")
 
 # Atmosphere Restart Files
 for ymd in "${ymd_list[@]}"; do
+  rm -rf "/lfs/h2/emc/global/noscrub/anton.fernando/enkfgdas.${ymd}"
+  rm -rf "/lfs/h2/emc/global/noscrub/anton.fernando/gdas.${ymd}"
+  rm -rf "/lfs/h2/emc/global/noscrub/anton.fernando/gfs.${ymd}"
   base_dir="/lfs/h2/emc/global/noscrub/anton.fernando/enkfgdas.${ymd}"
   base_dir_control_DIa="/lfs/h2/emc/global/noscrub/anton.fernando/gdas.${ymd}"
   base_dir_control_DIb="/lfs/h2/emc/global/noscrub/anton.fernando/gfs.${ymd}"
@@ -65,6 +68,10 @@ echo "Dummy atmos increment files created successfully."
 
 # Ocean Files
 for ymd in "${ymd_list[@]}"; do
+  rm -rf "/lfs/h2/emc/global/noscrub/anton.fernando/enkfgdas.${ymd}"
+  rm -rf "/lfs/h2/emc/global/noscrub/anton.fernando/enkfgfs.${ymd}"
+  rm -rf "/lfs/h2/emc/global/noscrub/anton.fernando/gdas.${ymd}"
+  rm -rf "/lfs/h2/emc/global/noscrub/anton.fernando/gfs.${ymd}"  
   base_dir="/lfs/h2/emc/global/noscrub/anton.fernando/enkfgdas.${ymd}"
   base_dir_inc="/lfs/h2/emc/global/noscrub/anton.fernando/enkfgfs.${ymd}"
   base_dir_control_restart="/lfs/h2/emc/global/noscrub/anton.fernando/gdas.${ymd}"
@@ -105,6 +112,8 @@ echo "Dummy ocean files created successfully."
 
 # Ice Files
 for ymd in "${ymd_list[@]}"; do
+  rm -rf "/lfs/h2/emc/global/noscrub/anton.fernando/enkfgfs.${ymd}"
+  rm -rf "/lfs/h2/emc/global/noscrub/anton.fernando/gfs.${ymd}"
   base_dir="/lfs/h2/emc/global/noscrub/anton.fernando/enkfgfs.${ymd}"
   base_dir_control="/lfs/h2/emc/global/noscrub/anton.fernando/gfs.${ymd}"
 
