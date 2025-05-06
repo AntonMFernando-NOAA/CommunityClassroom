@@ -3,6 +3,7 @@
 # Variables
 ymd_list=("20241116" "20241117")
 cycles=("00" "06" "12" "18")
+mid_cyc=("21" "03" "09" "15")
 
 # Restart files
 atmos_restart_files=("fv_core.res" "fv_srf_wnd.res" "coupler.res" "phy_data" "sfc_data")
@@ -32,10 +33,10 @@ for ymd in "${ymd_list[@]}"; do
       # Loop through files and create them
       for file in "${atmos_restart_files[@]}"; do
         # Create the base file
-        touch "${mem_dir}/${ymd}.210000.${file}"
+        touch "${mem_dir}/${ymd}.${mid_cyc}0000.${file}"
         # Create the tile files
         for tile in $(seq 1 6); do
-          touch "${mem_dir}/${ymd}.210000.${file}.tile${tile}"
+          touch "${mem_dir}/${ymd}.${mid_cyc}0000.${file}.tile${tile}"
         done
       done
     done
@@ -89,7 +90,7 @@ for ymd in "${ymd_list[@]}"; do
     mkdir -p "${mem_dir_control_increment}"
     touch "${mem_dir_control_increment}/gfs.t${hour}z.ocninc.nc"
     for file in "${ocean_files[@]}"; do
-      touch "${mem_dir_control_restart}/${ymd}.210000.${file}"
+      touch "${mem_dir_control_restart}/${ymd}.${mid_cyc}0000.${file}"
     done
 
     for mem in $(seq 0 80); do
@@ -109,8 +110,8 @@ for ymd in "${ymd_list[@]}"; do
 
       # Loop through files and create them
       for file in "${ocean_files[@]}"; do
-        touch "${mem_dir}/${ymd}.210000.${file}"
-        touch "${mem_dir_inc}/${ymd}.210000.${file}"
+        touch "${mem_dir}/${ymd}.${mid_cyc}0000.${file}"
+        touch "${mem_dir_inc}/${ymd}.${mid_cyc}0000.${file}"
       done
     done
   done
@@ -135,8 +136,8 @@ for ymd in "${ymd_list[@]}"; do
       # Create the directory if it doesn't exist
       mkdir -p "${mem_dir}"
       mkdir -p "${mem_dir_control}"
-      touch "${mem_dir}/${ymd}.210000.cice_model_anl.res.nc"
-      touch "${mem_dir_control}/${ymd}.210000.cice_model_anl.res.nc"
+      touch "${mem_dir}/${ymd}.${mid_cyc}0000.cice_model_anl.res.nc"
+      touch "${mem_dir_control}/${ymd}.${mid_cyc}0000.cice_model_anl.res.nc"
     done
   done
 done
