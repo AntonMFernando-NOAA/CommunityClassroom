@@ -4,7 +4,8 @@ echo "Removed old dummy files successfully."
 # Variables
 ymd_list=("20241116" "20241117")
 cycles=("00" "06" "12" "18")
-mid_cyc_array=("21" "03" "09" "15")  # Corresponding mid_cyc values for each cycle
+mid_cyc_previous=("03" "09" "15" "21")  # Corresponding mid_cyc values for each cycle
+mid_cyc_next=("21" "03" "09" "15")
 atmos_restart_files=("fv_core.res" "fv_srf_wnd.res" "coupler.res" "phy_data" "sfc_data")
 atmos_increment_files=("ratmi003.nc" "ratmi009.nc" "ratminc.nc")
 ocean_files=("MOM.res.nc" "MOM.res_1.nc" "MOM.res_2.nc" "MOM.res_3.nc")
@@ -18,7 +19,7 @@ for ymd in "${ymd_list[@]}"; do
   # Loop through cycles
   for i in "${!cycles[@]}"; do
     hour="${cycles[$i]}"
-    mid_cyc="${mid_cyc_array[$i]}"  # Get the corresponding mid_cyc value
+    mid_cyc="${mid_cyc_next[$i]}"  # Get the corresponding mid_cyc value
 
     mkdir -p "${base_dir_control_DIa}/${hour}/analysis/atmos"
     mkdir -p "${base_dir_control_DIb}/${hour}/analysis/atmos"
@@ -52,7 +53,7 @@ for ymd in "${ymd_list[@]}"; do
   # Loop through cycles
   for i in "${!cycles[@]}"; do
     hour="${cycles[$i]}"
-    mid_cyc="${mid_cyc_array[$i]}"  # Get the corresponding mid_cyc value
+    mid_cyc="${mid_cyc_next[$i]}"  # Get the corresponding mid_cyc value
     for mem in $(seq 0 80); do
       mem_folder=$(printf "mem%03d" "$mem")
       mem_dir="${base_dir}/${hour}/${mem_folder}/analysis/atmos"
@@ -76,7 +77,7 @@ for ymd in "${ymd_list[@]}"; do
 
   for i in "${!cycles[@]}"; do
     hour="${cycles[$i]}"
-    mid_cyc="${mid_cyc_array[$i]}"  # Get the corresponding mid_cyc value
+    mid_cyc="${mid_cyc_next[$i]}"  # Get the corresponding mid_cyc value
 
     mem_dir_control_restart="${base_dir_control_restart}/${hour}/model/ocean/restart"
     mem_dir_control_increment="${base_dir_control_increment}/${hour}/analysis/ocean"
@@ -114,7 +115,7 @@ for ymd in "${ymd_list[@]}"; do
 
   for i in "${!cycles[@]}"; do
     hour="${cycles[$i]}"
-    mid_cyc="${mid_cyc_array[$i]}"  # Get the corresponding mid_cyc value
+    mid_cyc="${mid_cyc_previous[$i]}"  # Get the corresponding mid_cyc value
 
     for mem in $(seq 0 80); do
       mem_folder=$(printf "mem%03d" "$mem")
