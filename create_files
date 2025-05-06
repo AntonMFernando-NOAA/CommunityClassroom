@@ -1,5 +1,6 @@
 #!/bin/bash
 rm -rf "/lfs/h2/emc/global/noscrub/anton.fernando/dummy"
+echo "Removed old dummy files successfully."
 # Variables
 ymd_list=("20241116" "20241117")
 cycles=("00" "06" "12" "18")
