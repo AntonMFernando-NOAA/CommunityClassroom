@@ -53,7 +53,6 @@ for ymd in "${ymd_list[@]}"; do
   # Loop through cycles
   for i in "${!cycles[@]}"; do
     hour="${cycles[$i]}"
-    mid_cyc="${mid_cyc_next[$i]}"  # Get the corresponding mid_cyc value
     for mem in $(seq 0 80); do
       mem_folder=$(printf "mem%03d" "$mem")
       mem_dir="${base_dir}/${hour}/${mem_folder}/analysis/atmos"
@@ -77,7 +76,7 @@ for ymd in "${ymd_list[@]}"; do
 
   for i in "${!cycles[@]}"; do
     hour="${cycles[$i]}"
-    mid_cyc="${mid_cyc_previous[$i]}"  # Get the corresponding mid_cyc value
+    mid_cyc="${mid_cyc_next[$i]}"  # Get the corresponding mid_cyc value
 
     mem_dir_control_restart="${base_dir_control_restart}/${hour}/model/ocean/restart"
     mem_dir_control_increment="${base_dir_control_increment}/${hour}/analysis/ocean"
@@ -115,7 +114,7 @@ for ymd in "${ymd_list[@]}"; do
 
   for i in "${!cycles[@]}"; do
     hour="${cycles[$i]}"
-    mid_cyc="${mid_cyc_next[$i]}"  # Get the corresponding mid_cyc value
+    mid_cyc="${mid_cyc_previous[$i]}"  # Get the corresponding mid_cyc value
 
     for mem in $(seq 0 80); do
       mem_folder=$(printf "mem%03d" "$mem")
