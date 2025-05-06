@@ -3,38 +3,37 @@
 # Variables
 ymd_list=("20241116" "20241117")
 cycles=("00" "06" "12" "18")
-mid_cyc=("21" "03" "09" "15")
-
-# Restart files
+mid_cyc_array=("21" "03" "09" "15")  # Corresponding mid_cyc values for each cycle
 atmos_restart_files=("fv_core.res" "fv_srf_wnd.res" "coupler.res" "phy_data" "sfc_data")
+atmos_increment_files=("ratmi003.nc" "ratmi009.nc" "ratminc.nc")
+ocean_files=("MOM.res.nc" "MOM.res_1.nc" "MOM.res_2.nc" "MOM.res_3.nc")
 
+# Atmosphere Restart Files
 for ymd in "${ymd_list[@]}"; do
   base_dir="/lfs/h2/emc/global/noscrub/anton.fernando/enkfgdas.${ymd}"
   base_dir_control_DIa="/lfs/h2/emc/global/noscrub/anton.fernando/gdas.${ymd}"
   base_dir_control_DIb="/lfs/h2/emc/global/noscrub/anton.fernando/gfs.${ymd}"
 
-
   # Loop through cycles
-  for hour in "${cycles[@]}"; do
+  for i in "${!cycles[@]}"; do
+    hour="${cycles[$i]}"
+    mid_cyc="${mid_cyc_array[$i]}"  # Get the corresponding mid_cyc value
+
     mkdir -p "${base_dir_control_DIa}/${hour}/analysis/atmos"
     mkdir -p "${base_dir_control_DIb}/${hour}/analysis/atmos"
     touch "${base_dir_control_DIa}/${hour}/analysis/atmos/gdas.t${hour}z.atma003.ensres.nc"
     touch "${base_dir_control_DIb}/${hour}/analysis/atmos/gfs.t${hour}z.atminc.nc"
     touch "${base_dir_control_DIb}/${hour}/analysis/atmos/gfs.t${hour}z.atmanl.nc"
+
     # Loop through members
     for mem in $(seq 0 80); do
-      # Zero-pad the member folder name to three digits
       mem_folder=$(printf "mem%03d" "$mem")
-      # Construct the directory path
       mem_dir="${base_dir}/${hour}/${mem_folder}/model/atmos/restart"
-      # Create the directory if it doesn't exist
       mkdir -p "${mem_dir}"
-      
+
       # Loop through files and create them
       for file in "${atmos_restart_files[@]}"; do
-        # Create the base file
         touch "${mem_dir}/${ymd}.${mid_cyc}0000.${file}"
-        # Create the tile files
         for tile in $(seq 1 6); do
           touch "${mem_dir}/${ymd}.${mid_cyc}0000.${file}.tile${tile}"
         done
@@ -45,24 +44,16 @@ done
 
 echo "Dummy atmos restart files created successfully."
 
-# Increment files (atmos)
-atmos_increment_files=("ratmi003.nc" "ratmi009.nc" "ratminc.nc")
-
+# Atmosphere Increment Files
 for ymd in "${ymd_list[@]}"; do
   base_dir="/lfs/h2/emc/global/noscrub/anton.fernando/enkfgfs.${ymd}"
 
-  # Loop through cycles
   for hour in "${cycles[@]}"; do
-    # Loop through members
     for mem in $(seq 0 80); do
-      # Zero-pad the member folder name to three digits
       mem_folder=$(printf "mem%03d" "$mem")
-      # Construct the directory path
       mem_dir="${base_dir}/${hour}/${mem_folder}/analysis/atmos"
-      # Create the directory if it doesn't exist
       mkdir -p "${mem_dir}"
-      
-      # Loop through files and create them
+
       for file in "${atmos_increment_files[@]}"; do
         touch "${mem_dir}/enkfgfs.t${hour}z.${file}"
       done
@@ -72,43 +63,36 @@ done
 
 echo "Dummy atmos increment files created successfully."
 
-# Ocean files
-ocean_files=("MOM.res.nc" "MOM.res_1.nc" "MOM.res_2.nc" "MOM.res_3.nc")
-
+# Ocean Files
 for ymd in "${ymd_list[@]}"; do
   base_dir="/lfs/h2/emc/global/noscrub/anton.fernando/enkfgdas.${ymd}"
   base_dir_inc="/lfs/h2/emc/global/noscrub/anton.fernando/enkfgfs.${ymd}"
   base_dir_control_restart="/lfs/h2/emc/global/noscrub/anton.fernando/gdas.${ymd}"
   base_dir_control_increment="/lfs/h2/emc/global/noscrub/anton.fernando/gfs.${ymd}"
 
-  # Loop through cycles
-  for hour in "${cycles[@]}"; do
-    # Loop through members
+  for i in "${!cycles[@]}"; do
+    hour="${cycles[$i]}"
+    mid_cyc="${mid_cyc_array[$i]}"  # Get the corresponding mid_cyc value
+
     mem_dir_control_restart="${base_dir_control_restart}/${hour}/model/ocean/restart"
     mem_dir_control_increment="${base_dir_control_increment}/${hour}/analysis/ocean"
     mkdir -p "${mem_dir_control_restart}"
     mkdir -p "${mem_dir_control_increment}"
     touch "${mem_dir_control_increment}/gfs.t${hour}z.ocninc.nc"
+
     for file in "${ocean_files[@]}"; do
       touch "${mem_dir_control_restart}/${ymd}.${mid_cyc}0000.${file}"
     done
 
     for mem in $(seq 0 80); do
-      # Zero-pad the member folder name to three digits
       mem_folder=$(printf "mem%03d" "$mem")
-      # Construct the directory paths
       mem_dir="${base_dir}/${hour}/${mem_folder}/model/ocean/restart"
       mem_dir_inc="${base_dir_inc}/${hour}/${mem_folder}/analysis/ocean"
-
-      # Create the directories if they don't exist
-      mkdir -p "${mem_dir}"
-      mkdir -p "${mem_dir_inc}"
+      mkdir -p "${mem_dir}" "${mem_dir_inc}"
 
       touch "${mem_dir}/enkfgfs.t${hour}z.ocninc.nc"
       touch "${mem_dir_inc}/enkfgfs.t${hour}z.ocninc.nc"
 
-
-      # Loop through files and create them
       for file in "${ocean_files[@]}"; do
         touch "${mem_dir}/${ymd}.${mid_cyc}0000.${file}"
         touch "${mem_dir_inc}/${ymd}.${mid_cyc}0000.${file}"
@@ -119,23 +103,21 @@ done
 
 echo "Dummy ocean files created successfully."
 
-# Ice files
+# Ice Files
 for ymd in "${ymd_list[@]}"; do
   base_dir="/lfs/h2/emc/global/noscrub/anton.fernando/enkfgfs.${ymd}"
   base_dir_control="/lfs/h2/emc/global/noscrub/anton.fernando/gfs.${ymd}"
 
-  # Loop through cycles
-  for hour in "${cycles[@]}"; do
-    # Loop through members
+  for i in "${!cycles[@]}"; do
+    hour="${cycles[$i]}"
+    mid_cyc="${mid_cyc_array[$i]}"  # Get the corresponding mid_cyc value
+
     for mem in $(seq 0 80); do
-      # Zero-pad the member folder name to three digits
       mem_folder=$(printf "mem%03d" "$mem")
-      # Construct the directory path
       mem_dir="${base_dir}/${hour}/${mem_folder}/analysis/ice"
       mem_dir_control="${base_dir_control}/${hour}/analysis/ice"
-      # Create the directory if it doesn't exist
-      mkdir -p "${mem_dir}"
-      mkdir -p "${mem_dir_control}"
+      mkdir -p "${mem_dir}" "${mem_dir_control}"
+
       touch "${mem_dir}/${ymd}.${mid_cyc}0000.cice_model_anl.res.nc"
       touch "${mem_dir_control}/${ymd}.${mid_cyc}0000.cice_model_anl.res.nc"
     done
