@@ -4,7 +4,7 @@ echo "Removed old dummy files successfully."
 # Variables
 ymd_list=("20241116" "20241117")
 cycles=("00" "06" "12" "18")
-mid_cyc_array=("03" "09" "15" "21")  # Corresponding mid_cyc values for each cycle
+mid_cyc_array=("21" "03" "09" "15")  # Corresponding mid_cyc values for each cycle
 atmos_restart_files=("fv_core.res" "fv_srf_wnd.res" "coupler.res" "phy_data" "sfc_data")
 atmos_increment_files=("ratmi003.nc" "ratmi009.nc" "ratminc.nc")
 ocean_files=("MOM.res.nc" "MOM.res_1.nc" "MOM.res_2.nc" "MOM.res_3.nc")
