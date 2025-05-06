@@ -49,7 +49,10 @@ echo "Dummy atmos restart files created successfully."
 for ymd in "${ymd_list[@]}"; do
   base_dir="/lfs/h2/emc/global/noscrub/anton.fernando/dummy/enkfgfs.${ymd}"
 
-  for hour in "${cycles[@]}"; do
+  # Loop through cycles
+  for i in "${!cycles[@]}"; do
+    hour="${cycles[$i]}"
+    mid_cyc="${mid_cyc_array[$i]}"  # Get the corresponding mid_cyc value
     for mem in $(seq 0 80); do
       mem_folder=$(printf "mem%03d" "$mem")
       mem_dir="${base_dir}/${hour}/${mem_folder}/analysis/atmos"
