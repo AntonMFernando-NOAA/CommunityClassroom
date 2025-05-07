@@ -35,9 +35,9 @@ for ymd in "${ymd_list[@]}"; do
 
       # Loop through files and create them
       for file in "${atmos_restart_files[@]}"; do
-        touch "${mem_dir}/${ymd}.${mid_cyc}0000.${file}"
+        touch "${mem_dir}/${ymd}.${mid_cyc}0000.${file}.nc"
         for tile in $(seq 1 6); do
-          touch "${mem_dir}/${ymd}.${mid_cyc}0000.${file}.tile${tile}"
+          touch "${mem_dir}/${ymd}.${mid_cyc}0000.${file}.tile${tile}.nc"
         done
       done
     done
