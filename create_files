@@ -112,6 +112,7 @@ echo "Dummy ocean files created successfully."
 for ymd in "${ymd_list[@]}"; do
   base_dir="/lfs/h2/emc/global/noscrub/anton.fernando/dummy/enkfgfs.${ymd}"
   base_dir_control="/lfs/h2/emc/global/noscrub/anton.fernando/dummy/gfs.${ymd}"
+  ${ymd_prev}=${ymd} - 1
 
   for i in "${!cycles[@]}"; do
     hour="${cycles[$i]}"
@@ -125,6 +126,8 @@ for ymd in "${ymd_list[@]}"; do
 
       touch "${mem_dir}/${ymd}.${mid_cyc}0000.cice_model_anl.res.nc"
       touch "${mem_dir_control}/${ymd}.${mid_cyc}0000.cice_model_anl.res.nc"
+      touch "${mem_dir}/${ymd_prev}.${mid_cyc}0000.cice_model_anl.res.nc"
+      touch "${mem_dir_control}/${ymd_prev}.${mid_cyc}0000.cice_model_anl.res.nc"      
     done
   done
 done
