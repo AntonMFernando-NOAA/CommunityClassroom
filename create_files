@@ -117,7 +117,7 @@ mid_cyc="21"  # Get the corresponding mid_cyc value
 ymd="20241117"
 ymd_prev="20241116"  # Get the corresponding mid_cyc value
 
-mem_folder = "000"
+mem_folder="000"
 mem_dir="${base_dir}/${hour}/${mem_folder}/analysis/ice"
 mem_dir_control="${base_dir_control}/${hour}/analysis/ice"
 mkdir -p "${mem_dir}" "${mem_dir_control}"
