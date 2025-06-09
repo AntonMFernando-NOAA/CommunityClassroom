@@ -1,4 +1,4 @@
-cd /lfs/h2/emc/global/noscrub/anton.fernando/RUNTESTS/EXPDIR//C48_ATM
+cd /lfs/h2/emc/global/noscrub/anton.fernando/RUNTESTS/EXPDIR/C48_ATM
 rocotorun -d C48_ATM.db -w C48_ATM.xml
 rocotorun -d C48_ATM.db -w C48_ATM.xml
 cd /lfs/h2/emc/global/noscrub/anton.fernando/RUNTESTS/EXPDIR//C48mx500_3DVarAOWCDA
