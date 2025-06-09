@@ -1,53 +1,40 @@
-exp
-cd C48_ATM
+cd /lfs/h2/emc/global/noscrub/anton.fernando/RUNTESTS/EXPDIR//C48_ATM
 rocotorun -d C48_ATM.db -w C48_ATM.xml
 rocotorun -d C48_ATM.db -w C48_ATM.xml
-exp
-cd C48mx500_3DVarAOWCDA
+cd /lfs/h2/emc/global/noscrub/anton.fernando/RUNTESTS/EXPDIR//C48mx500_3DVarAOWCDA
 rocotorun -d C48mx500_3DVarAOWCDA.db -w C48mx500_3DVarAOWCDA.xml
 rocotorun -d C48mx500_3DVarAOWCDA.db -w C48mx500_3DVarAOWCDA.xml
-exp
-cd C48mx500_hybAOWCDA
+cd /lfs/h2/emc/global/noscrub/anton.fernando/RUNTESTS/EXPDIR/C48mx500_hybAOWCDA
 rocotorun -d C48mx500_hybAOWCDA.db -w C48mx500_hybAOWCDA.xml
 rocotorun -d C48mx500_hybAOWCDA.db -w C48mx500_hybAOWCDA.xml
-exp
-cd C48_S2SW
+cd /lfs/h2/emc/global/noscrub/anton.fernando/RUNTESTS/EXPDIR/C48_S2SW
 rocotorun -d C48_S2SW.db -w C48_S2SW.xml
 rocotorun -d C48_S2SW.db -w C48_S2SW.xml
-exp
-cd C48_S2SWA_gefs
+cd /lfs/h2/emc/global/noscrub/anton.fernando/RUNTESTS/EXPDIR/C48_S2SWA_gefs
 rocotorun -d C48_S2SWA_gefs.db -w C48_S2SWA_gefs.xml
 rocotorun -d C48_S2SWA_gefs.db -w C48_S2SWA_gefs.xml
-exp
-cd C48_S2SWA_gefs_RT
+cd /lfs/h2/emc/global/noscrub/anton.fernando/RUNTESTS/EXPDIR/C48_S2SWA_gefs_RT
 rocotorun -d C48_S2SWA_gefs_RT.db -w C48_S2SWA_gefs_RT.xml
 rocotorun -d C48_S2SWA_gefs_RT.db -w C48_S2SWA_gefs_RT.xml
-exp
-cd C48_S2SW_extended
+cd /lfs/h2/emc/global/noscrub/anton.fernando/RUNTESTS/EXPDIR/C48_S2SW_extended
 rocotorun -d C48_S2SW_extended.db -w C48_S2SW_extended.xml
 rocotorun -d C48_S2SW_extended.db -w C48_S2SW_extended.xml
-exp
-cd C96_atm3DVar_extended
+cd /lfs/h2/emc/global/noscrub/anton.fernando/RUNTESTS/EXPDIR/C96_atm3DVar_extended
 rocotorun -d C96_atm3DVar_extended.db -w C96_atm3DVar_extended.xml
 rocotorun -d C96_atm3DVar_extended.db -w C96_atm3DVar_extended.xml
-exp
-cd C96C48_hybatmDA
+cd /lfs/h2/emc/global/noscrub/anton.fernando/RUNTESTS/EXPDIR/C96C48_hybatmDA
 rocotorun -d C96C48_hybatmDA.db -w C96C48_hybatmDA.xml
 rocotorun -d C96C48_hybatmDA.db -w C96C48_hybatmDA.xml
-exp
-cd C96C48_hybatmsnowDA
+cd /lfs/h2/emc/global/noscrub/anton.fernando/RUNTESTS/EXPDIR/C96C48_hybatmsnowDA
 rocotorun -d C96C48_hybatmsnowDA.db -w C96C48_hybatmsnowDA.xml
 rocotorun -d C96C48_hybatmsnowDA.db -w C96C48_hybatmsnowDA.xml
-exp
-cd C96C48mx500_S2SW_cyc_gfs
+cd /lfs/h2/emc/global/noscrub/anton.fernando/RUNTESTS/EXPDIR/C96C48mx500_S2SW_cyc_gfs
 rocotorun -d C96C48mx500_S2SW_cyc_gfs.db -w C96C48mx500_S2SW_cyc_gfs.xml
 rocotorun -d C96C48mx500_S2SW_cyc_gfs.db -w C96C48mx500_S2SW_cyc_gfs.xml
-exp
-cd C96C48_ufs_hybatmDA
+cd /lfs/h2/emc/global/noscrub/anton.fernando/RUNTESTS/EXPDIR/C96C48_ufs_hybatmDA
 rocotorun -d C96C48_ufs_hybatmDA.db -w C96C48_ufs_hybatmDA.xml
 rocotorun -d C96C48_ufs_hybatmDA.db -w C96C48_ufs_hybatmDA.xml
-exp
-cd C96mx100_S2S
+cd /lfs/h2/emc/global/noscrub/anton.fernando/RUNTESTS/EXPDIR/C96mx100_S2S
 rocotorun -d C96mx100_S2S.db -w C96mx100_S2S.xml
 rocotorun -d C96mx100_S2S.db -w C96mx100_S2S.xml
 
