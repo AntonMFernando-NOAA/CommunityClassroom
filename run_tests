@@ -34,8 +34,18 @@ rocotorun -d C96C48mx500_S2SW_cyc_gfs.db -w C96C48mx500_S2SW_cyc_gfs.xml
 cd /lfs/h2/emc/global/noscrub/anton.fernando/RUNTESTS/EXPDIR/C96C48_ufs_hybatmDA
 rocotorun -d C96C48_ufs_hybatmDA.db -w C96C48_ufs_hybatmDA.xml
 rocotorun -d C96C48_ufs_hybatmDA.db -w C96C48_ufs_hybatmDA.xml
-
-
+cd /lfs/h2/emc/global/noscrub/anton.fernando/RUNTESTS/EXPDIR/C96_gcafs_cycled
+rocotorun -d C96_gcafs_cycled.db -w C96_gcafs_cycled.xml
+rocotorun -d C96_gcafs_cycled.db -w C96_gcafs_cycled.xml
+cd /lfs/h2/emc/global/noscrub/anton.fernando/RUNTESTS/EXPDIR/C96_gcafs_cycled_noDA
+rocotorun -d C96_gcafs_cycled_noDA.db -w C96_gcafs_cycled_noDA.xml
+rocotorun -d C96_gcafs_cycled_noDA.db -w C96_gcafs_cycled_noDA.xml
+cd /lfs/h2/emc/global/noscrub/anton.fernando/RUNTESTS/EXPDIR/C96_gcafs_cycled
+rocotorun -d C96_gcafs_cycled.db -w C96_gcafs_cycled.xml
+rocotorun -d C96_gcafs_cycled.db -w C96_gcafs_cycled.xml
+cd /lfs/h2/emc/global/noscrub/anton.fernando/RUNTESTS/EXPDIR/C96mx100_S2S
+rocotorun -d C96mx100_S2S.db -w C96mx100_S2S.xml
+rocotorun -d C96mx100_S2S.db -w C96mx100_S2S.xml
 
 
 
