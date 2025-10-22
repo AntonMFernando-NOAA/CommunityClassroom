@@ -81,7 +81,8 @@ fi
 
 DIR_D=""
 DIR_T=""
-OUTPUT="output.csv"
+OUTPUT=""
+OUTPUT_PROVIDED=0
 EXCLUDE_PATTERNS=""
 RECURSIVE=0
 
@@ -105,8 +106,9 @@ while [[ $# -gt 0 ]]; do
                 DIR_D="$1"
             elif [[ -z "$DIR_T" ]]; then
                 DIR_T="$1"
-            elif [[ "$OUTPUT" == "output.csv" ]]; then
+            elif [[ $OUTPUT_PROVIDED -eq 0 ]]; then
                 OUTPUT="$1"
+                OUTPUT_PROVIDED=1
             fi
             ;;
     esac
@@ -117,6 +119,13 @@ if [[ ! -d "$DIR_D" ]] || [[ ! -d "$DIR_T" ]]; then
     echo "Usage: $0 <dir_d> <dir_t> [output.csv] [-r] [-m exclude_dirs]"
     echo "       $0 -h (for help)"
     exit 1
+fi
+
+# If output not provided, generate based on directory names
+if [[ -z "$OUTPUT" ]]; then
+    # Get the base name of DIR_T (final directory name)
+    t_base=$(basename "$DIR_T")
+    OUTPUT="output.${t_base}.csv"
 fi
 
 # Function to check if directory should be excluded
