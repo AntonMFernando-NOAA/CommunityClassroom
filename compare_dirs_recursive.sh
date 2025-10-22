@@ -336,7 +336,10 @@ if [[ $RECURSIVE -eq 1 ]]; then
                 fi
             fi
 
-            echo ".,$d_name,$d_size,$d_name,$t_size,$d_hash,$t_hash,$status" >> "$OUTPUT"
+            # Skip PERFECT files in CSV output
+            if [[ "$status" != "✓ PERFECT" ]]; then
+                echo ".,$d_name,$d_size,$d_name,$t_size,$d_hash,$t_hash,$status" >> "$OUTPUT"
+            fi
             printf "%-40s %s │ %-40s %s │ %s\n" "${d_name:0:40}" "$d_size_fmt" "${d_name:0:40}" "$t_size_fmt" "$status"
 
             d_matched["$d_name"]=1
@@ -398,7 +401,10 @@ if [[ $RECURSIVE -eq 1 ]]; then
                 fi
             fi
 
-            echo ".,$d_name,$d_size,$t_name,$t_size,$d_hash,$t_hash,$status" >> "$OUTPUT"
+            # Skip PERFECT files in CSV output
+            if [[ "$status" != "✓ PERFECT" ]]; then
+                echo ".,$d_name,$d_size,$t_name,$t_size,$d_hash,$t_hash,$status" >> "$OUTPUT"
+            fi
             printf "%-40s %s │ %-40s %s │ %s\n" "${d_name:0:40}" "$d_size_fmt" "${t_name:0:40}" "$t_size_fmt" "$status"
 
             d_matched["$d_name"]=1
@@ -533,7 +539,10 @@ if [[ $RECURSIVE -eq 1 ]]; then
                     fi
                 fi
 
-                echo "$subdir,$d_name,$d_size,$d_name,$t_size,$d_hash,$t_hash,$status" >> "$OUTPUT"
+                # Skip PERFECT files in CSV output
+                if [[ "$status" != "✓ PERFECT" ]]; then
+                    echo "$subdir,$d_name,$d_size,$d_name,$t_size,$d_hash,$t_hash,$status" >> "$OUTPUT"
+                fi
                 printf "%-40s %s │ %-40s %s │ %s\n" "${d_name:0:40}" "$d_size_fmt" "${d_name:0:40}" "$t_size_fmt" "$status"
 
                 d_matched["$d_name"]=1
@@ -597,7 +606,10 @@ if [[ $RECURSIVE -eq 1 ]]; then
                     fi
                 fi
 
-                echo "$subdir,$d_name,$d_size,$t_name,$t_size,$d_hash,$t_hash,$status" >> "$OUTPUT"
+                # Skip PERFECT files in CSV output
+                if [[ "$status" != "✓ PERFECT" ]]; then
+                    echo "$subdir,$d_name,$d_size,$t_name,$t_size,$d_hash,$t_hash,$status" >> "$OUTPUT"
+                fi
                 printf "%-40s %s │ %-40s %s │ %s\n" "${d_name:0:40}" "$d_size_fmt" "${t_name:0:40}" "$t_size_fmt" "$status"
 
                 d_matched["$d_name"]=1
@@ -734,7 +746,10 @@ else
                     fi
                 fi
 
-                echo ",$d_name,$d_size,$d_name,$t_size,$d_hash,$t_hash,$status" >> "$OUTPUT"
+                # Skip PERFECT files in CSV output
+                if [[ "$status" != "✓ PERFECT" ]]; then
+                    echo ",$d_name,$d_size,$d_name,$t_size,$d_hash,$t_hash,$status" >> "$OUTPUT"
+                fi
                 printf "%-40s %s │ %-40s %s │ %s\n" "${d_name:0:40}" "$d_size_fmt" "${d_name:0:40}" "$t_size_fmt" "$status"
 
                 d_matched["$d_name"]=1
@@ -798,7 +813,10 @@ else
                     fi
                 fi
 
-                echo ",$d_name,$d_size,$t_name,$t_size,$d_hash,$t_hash,$status" >> "$OUTPUT"
+                # Skip PERFECT files in CSV output
+                if [[ "$status" != "✓ PERFECT" ]]; then
+                    echo ",$d_name,$d_size,$t_name,$t_size,$d_hash,$t_hash,$status" >> "$OUTPUT"
+                fi
                 printf "%-40s %s │ %-40s %s │ %s\n" "${d_name:0:40}" "$d_size_fmt" "${t_name:0:40}" "$t_size_fmt" "$status"
 
                 d_matched["$d_name"]=1
@@ -860,7 +878,7 @@ if [[ -f "$OUTPUT" ]]; then
     echo "  Missing files:            $missing_files"
     echo ""
 
-    # Show missing files
+    # Show missing files FIRST
     if [[ $missing_files -gt 0 ]]; then
         echo "════════════════════════════════════════════════════════════════════════════════"
         echo "MISSING FILES (not found in both directories): $missing_files files"
@@ -874,66 +892,12 @@ if [[ -f "$OUTPUT" ]]; then
                 }
             }' | sort
         else
-            echo "  Details available in: $OUTPUT"
+            echo "  ($missing_files files - details in: $OUTPUT)"
         fi
         echo ""
     fi
 
-    # Show same size but different hash files
-    if [[ $size_ok_files -gt 0 ]]; then
-        echo "════════════════════════════════════════════════════════════════════════════════"
-        echo "SAME SIZE BUT DIFFERENT HASH FILES: $size_ok_files files"
-        echo "════════════════════════════════════════════════════════════════════════════════"
-        if [[ $size_ok_files -le 15 ]]; then
-            tail -n +2 "$OUTPUT" | awk -F',' '$8 ~ /SIZE_OK/ {
-                d_name = $2
-                d_size = $3
-                t_name = $4
-                t_size = $5
-                d_hash = $6
-                t_hash = $7
-                subdir = $1
-                printf "  %s/\n", (subdir == "." ? "ROOT" : subdir)
-                printf "    D: %-50s [%12s B] (hash: %s)\n", d_name, d_size, d_hash
-                printf "    T: %-50s [%12s B] (hash: %s)\n", t_name, t_size, t_hash
-                printf "\n"
-            }' | sort
-        else
-            echo "  Details available in: $OUTPUT"
-        fi
-        echo ""
-    fi
-
-    # Show close size files
-    if [[ $close_files -gt 0 ]]; then
-        echo "════════════════════════════════════════════════════════════════════════════════"
-        echo "CLOSE SIZE FILES (<5% size difference): $close_files files"
-        echo "════════════════════════════════════════════════════════════════════════════════"
-        if [[ $close_files -le 15 ]]; then
-            tail -n +2 "$OUTPUT" | awk -F',' '$8 ~ /CLOSE/ {
-                d_name = $2
-                d_size = $3
-                t_name = $4
-                t_size = $5
-                subdir = $1
-                if (d_size > 0) {
-                    diff = t_size - d_size
-                    if (diff < 0) diff = -diff
-                    pct = (diff * 100) / d_size
-                    printf "  %s/\n", (subdir == "." ? "ROOT" : subdir)
-                    printf "    D: %-50s [%12s B]\n", d_name, d_size
-                    printf "    T: %-50s [%12s B]\n", t_name, t_size
-                    printf "    → Difference: %s B (%+.1f%% %s)\n", diff, pct, (t_size > d_size ? "larger" : "smaller")
-                    printf "\n"
-                }
-            }' | sort
-        else
-            echo "  Details available in: $OUTPUT"
-        fi
-        echo ""
-    fi
-
-    # Show different sized files
+    # Show different sized files SECOND
     if [[ $different_files -gt 0 ]]; then
         echo "════════════════════════════════════════════════════════════════════════════════"
         echo "DIFFERENT SIZED FILES (>5% size difference): $different_files files"
@@ -957,7 +921,61 @@ if [[ -f "$OUTPUT" ]]; then
                 }
             }' | sort
         else
-            echo "  Details available in: $OUTPUT"
+            echo "  ($different_files files - details in: $OUTPUT)"
+        fi
+        echo ""
+    fi
+
+    # Show close size files THIRD
+    if [[ $close_files -gt 0 ]]; then
+        echo "════════════════════════════════════════════════════════════════════════════════"
+        echo "CLOSE SIZE FILES (<5% size difference): $close_files files"
+        echo "════════════════════════════════════════════════════════════════════════════════"
+        if [[ $close_files -le 15 ]]; then
+            tail -n +2 "$OUTPUT" | awk -F',' '$8 ~ /CLOSE/ {
+                d_name = $2
+                d_size = $3
+                t_name = $4
+                t_size = $5
+                subdir = $1
+                if (d_size > 0) {
+                    diff = t_size - d_size
+                    if (diff < 0) diff = -diff
+                    pct = (diff * 100) / d_size
+                    printf "  %s/\n", (subdir == "." ? "ROOT" : subdir)
+                    printf "    D: %-50s [%12s B]\n", d_name, d_size
+                    printf "    T: %-50s [%12s B]\n", t_name, t_size
+                    printf "    → Difference: %s B (%+.1f%% %s)\n", diff, pct, (t_size > d_size ? "larger" : "smaller")
+                    printf "\n"
+                }
+            }' | sort
+        else
+            echo "  ($close_files files - details in: $OUTPUT)"
+        fi
+        echo ""
+    fi
+
+    # Show same size but different hash files LAST
+    if [[ $size_ok_files -gt 0 ]]; then
+        echo "════════════════════════════════════════════════════════════════════════════════"
+        echo "SAME SIZE BUT DIFFERENT HASH FILES: $size_ok_files files"
+        echo "════════════════════════════════════════════════════════════════════════════════"
+        if [[ $size_ok_files -le 15 ]]; then
+            tail -n +2 "$OUTPUT" | awk -F',' '$8 ~ /SIZE_OK/ {
+                d_name = $2
+                d_size = $3
+                t_name = $4
+                t_size = $5
+                d_hash = $6
+                t_hash = $7
+                subdir = $1
+                printf "  %s/\n", (subdir == "." ? "ROOT" : subdir)
+                printf "    D: %-50s [%12s B] (hash: %s)\n", d_name, d_size, d_hash
+                printf "    T: %-50s [%12s B] (hash: %s)\n", t_name, t_size, t_hash
+                printf "\n"
+            }' | sort
+        else
+            echo "  ($size_ok_files files - details in: $OUTPUT)"
         fi
         echo ""
     fi
