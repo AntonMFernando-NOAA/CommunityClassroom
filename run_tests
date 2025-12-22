@@ -1,57 +1,55 @@
-cd /lfs/h2/emc/global/noscrub/anton.fernando/RUNTESTS/EXPDIR/C48_ATM
+cd /scratch3/NCEPDEV/global/Anton.Fernando/RUNTESTS/EXPDIR/C48_ATM
 rocotorun -d C48_ATM.db -w C48_ATM.xml
 rocotorun -d C48_ATM.db -w C48_ATM.xml
-cd /lfs/h2/emc/global/noscrub/anton.fernando/RUNTESTS/EXPDIR//C48mx500_3DVarAOWCDA
-rocotorun -d C48mx500_3DVarAOWCDA.db -w C48mx500_3DVarAOWCDA.xml
-rocotorun -d C48mx500_3DVarAOWCDA.db -w C48mx500_3DVarAOWCDA.xml
-cd /lfs/h2/emc/global/noscrub/anton.fernando/RUNTESTS/EXPDIR/C48mx500_hybAOWCDA
-rocotorun -d C48mx500_hybAOWCDA.db -w C48mx500_hybAOWCDA.xml
-rocotorun -d C48mx500_hybAOWCDA.db -w C48mx500_hybAOWCDA.xml
-cd /lfs/h2/emc/global/noscrub/anton.fernando/RUNTESTS/EXPDIR/C48_S2SW
+cd /scratch3/NCEPDEV/global/Anton.Fernando/RUNTESTS/EXPDIR/C48_S2SW
 rocotorun -d C48_S2SW.db -w C48_S2SW.xml
 rocotorun -d C48_S2SW.db -w C48_S2SW.xml
-cd /lfs/h2/emc/global/noscrub/anton.fernando/RUNTESTS/EXPDIR/C48_S2SWA_gefs
+cd /scratch3/NCEPDEV/global/Anton.Fernando/RUNTESTS/EXPDIR/C48_S2SWA_gefs
 rocotorun -d C48_S2SWA_gefs.db -w C48_S2SWA_gefs.xml
 rocotorun -d C48_S2SWA_gefs.db -w C48_S2SWA_gefs.xml
-cd /lfs/h2/emc/global/noscrub/anton.fernando/RUNTESTS/EXPDIR/C48_S2SWA_gefs_RT
+cd /scratch3/NCEPDEV/global/Anton.Fernando/RUNTESTS/EXPDIR/C48_S2SWA_gefs_RT
 rocotorun -d C48_S2SWA_gefs_RT.db -w C48_S2SWA_gefs_RT.xml
 rocotorun -d C48_S2SWA_gefs_RT.db -w C48_S2SWA_gefs_RT.xml
-cd /lfs/h2/emc/global/noscrub/anton.fernando/RUNTESTS/EXPDIR/C48_S2SW_extended
+cd /scratch3/NCEPDEV/global/Anton.Fernando/RUNTESTS/EXPDIR/C48_S2SW_extended
 rocotorun -d C48_S2SW_extended.db -w C48_S2SW_extended.xml
 rocotorun -d C48_S2SW_extended.db -w C48_S2SW_extended.xml
-cd /lfs/h2/emc/global/noscrub/anton.fernando/RUNTESTS/EXPDIR/C96_atm3DVar
-rocotorun -d C96_atm3DVar.db -w C96_atm3DVar.xml
-rocotorun -d C96_atm3DVar.db -w C96_atm3DVar.xml
-cd /lfs/h2/emc/global/noscrub/anton.fernando/RUNTESTS/EXPDIR/C96_atm3DVar_extended
-rocotorun -d C96_atm3DVar_extended.db -w C96_atm3DVar_extended.xml
-rocotorun -d C96_atm3DVar_extended.db -w C96_atm3DVar_extended.xml
-cd /lfs/h2/emc/global/noscrub/anton.fernando/RUNTESTS/EXPDIR/C96C48_hybatmDA
+cd /scratch3/NCEPDEV/global/Anton.Fernando/RUNTESTS/EXPDIR/C48mx500_3DVarAOWCDA
+rocotorun -d C48mx500_3DVarAOWCDA.db -w C48mx500_3DVarAOWCDA.xml
+rocotorun -d C48mx500_3DVarAOWCDA.db -w C48mx500_3DVarAOWCDA.xml
+cd /scratch3/NCEPDEV/global/Anton.Fernando/RUNTESTS/EXPDIR/C48mx500_hybAOWCDA
+rocotorun -d C48mx500_hybAOWCDA.db -w C48mx500_hybAOWCDA.xml
+rocotorun -d C48mx500_hybAOWCDA.db -w C48mx500_hybAOWCDA.xml
+cd /scratch3/NCEPDEV/global/Anton.Fernando/RUNTESTS/EXPDIR/C96C48_hybatmDA
 rocotorun -d C96C48_hybatmDA.db -w C96C48_hybatmDA.xml
 rocotorun -d C96C48_hybatmDA.db -w C96C48_hybatmDA.xml
-cd /lfs/h2/emc/global/noscrub/anton.fernando/RUNTESTS/EXPDIR/C96C48_hybatmsnowDA
+cd /scratch3/NCEPDEV/global/Anton.Fernando/RUNTESTS/EXPDIR/C96C48_hybatmsnowDA
 rocotorun -d C96C48_hybatmsnowDA.db -w C96C48_hybatmsnowDA.xml
 rocotorun -d C96C48_hybatmsnowDA.db -w C96C48_hybatmsnowDA.xml
-cd /lfs/h2/emc/global/noscrub/anton.fernando/RUNTESTS/EXPDIR/C96C48mx500_S2SW_cyc_gfs
-rocotorun -d C96C48mx500_S2SW_cyc_gfs.db -w C96C48mx500_S2SW_cyc_gfs.xml
-rocotorun -d C96C48mx500_S2SW_cyc_gfs.db -w C96C48mx500_S2SW_cyc_gfs.xml
-cd /lfs/h2/emc/global/noscrub/anton.fernando/RUNTESTS/EXPDIR/C96C48_ufs_hybatmDA
+cd /scratch3/NCEPDEV/global/Anton.Fernando/RUNTESTS/EXPDIR/C96C48_hybatmsoilDA
+rocotorun -d C96C48_hybatmsoilDA.db -w C96C48_hybatmsoilDA.xml
+rocotorun -d C96C48_hybatmsoilDA.db -w C96C48_hybatmsoilDA.xml
+cd /scratch3/NCEPDEV/global/Anton.Fernando/RUNTESTS/EXPDIR/C96C48_ufs_hybatmDA
 rocotorun -d C96C48_ufs_hybatmDA.db -w C96C48_ufs_hybatmDA.xml
 rocotorun -d C96C48_ufs_hybatmDA.db -w C96C48_ufs_hybatmDA.xml
-cd /lfs/h2/emc/global/noscrub/anton.fernando/RUNTESTS/EXPDIR/C96_gcafs_cycled
+cd /scratch3/NCEPDEV/global/Anton.Fernando/RUNTESTS/EXPDIR/C96C48_ufsgsi_hybatmDA
+rocotorun -d C96C48_ufsgsi_hybatmDA.db -w C96C48_ufsgsi_hybatmDA.xml
+rocotorun -d C96C48_ufsgsi_hybatmDA.db -w C96C48_ufsgsi_hybatmDA.xml
+cd /scratch3/NCEPDEV/global/Anton.Fernando/RUNTESTS/EXPDIR/C96C48mx500_S2SW_cyc_gfs
+rocotorun -d C96C48mx500_S2SW_cyc_gfs.db -w C96C48mx500_S2SW_cyc_gfs.xml
+rocotorun -d C96C48mx500_S2SW_cyc_gfs.db -w C96C48mx500_S2SW_cyc_gfs.xml
+cd /scratch3/NCEPDEV/global/Anton.Fernando/RUNTESTS/EXPDIR/C96_atm3DVar
+rocotorun -d C96_atm3DVar.db -w C96_atm3DVar.xml
+rocotorun -d C96_atm3DVar.db -w C96_atm3DVar.xml
+cd /scratch3/NCEPDEV/global/Anton.Fernando/RUNTESTS/EXPDIR/C96_atm3DVar_extended
+rocotorun -d C96_atm3DVar_extended.db -w C96_atm3DVar_extended.xml
+rocotorun -d C96_atm3DVar_extended.db -w C96_atm3DVar_extended.xml
+cd /scratch3/NCEPDEV/global/Anton.Fernando/RUNTESTS/EXPDIR/C96_gcafs_cycled
 rocotorun -d C96_gcafs_cycled.db -w C96_gcafs_cycled.xml
 rocotorun -d C96_gcafs_cycled.db -w C96_gcafs_cycled.xml
-cd /lfs/h2/emc/global/noscrub/anton.fernando/RUNTESTS/EXPDIR/C96_gcafs_cycled_noDA
+cd /scratch3/NCEPDEV/global/Anton.Fernando/RUNTESTS/EXPDIR/C96_gcafs_cycled_noDA
 rocotorun -d C96_gcafs_cycled_noDA.db -w C96_gcafs_cycled_noDA.xml
 rocotorun -d C96_gcafs_cycled_noDA.db -w C96_gcafs_cycled_noDA.xml
-cd /lfs/h2/emc/global/noscrub/anton.fernando/RUNTESTS/EXPDIR/C96_gcafs_cycled
-rocotorun -d C96_gcafs_cycled.db -w C96_gcafs_cycled.xml
-rocotorun -d C96_gcafs_cycled.db -w C96_gcafs_cycled.xml
-cd /lfs/h2/emc/global/noscrub/anton.fernando/RUNTESTS/EXPDIR/C96mx100_S2S
+cd /scratch3/NCEPDEV/global/Anton.Fernando/RUNTESTS/EXPDIR/C96mx100_S2S
 rocotorun -d C96mx100_S2S.db -w C96mx100_S2S.xml
 rocotorun -d C96mx100_S2S.db -w C96mx100_S2S.xml
-
-
-
-
-
 
