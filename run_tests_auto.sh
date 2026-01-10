@@ -4,10 +4,10 @@
 # Description: Automate running workflow tests using generate_workflows.sh
 #              and manage crontab entries for Rocoto workflows
 #
-# Usage: ./run_all_tests.sh <test_name|all|G|E|S|C> <suffix> [hpc_account]
+# Usage: ./run_all_tests.sh <test_name|all|G|E|S|C> [suffix] [hpc_account]
 #        test_name: specific test case name (e.g., C48_ATM) or "all" for all tests
 #                   or G/E/S/C for GFS/GEFS/SFS/GCAFS test suites
-#        suffix: tail to append to test name (e.g., "t", "t1", "dev")
+#        suffix: tail to append to test name (e.g., "t", "t1", "dev") - defaults to "t"
 #        hpc_account: defaults to platform-specific account
 #
 # Examples:
@@ -117,7 +117,7 @@ show_help() {
 $(basename "$0") - Automate running workflow tests with automatic platform detection
 
 USAGE:
-    $(basename "$0") <test_name|all> <suffix> [hpc_account]
+    $(basename "$0") <test_name|all|G|E|S|C> [suffix] [hpc_account]
     $(basename "$0") [--help|-h]
 
 DESCRIPTION:
@@ -132,8 +132,9 @@ ARGUMENTS:
                     - E/gefs: GEFS test cases only
                     - S/sfs: SFS test cases only
                     - C/gcafs: GCAFS test cases only
-    suffix          Tail to append to test name (e.g., "t", "t1", "dev")
-    hpc_account     HPC account to use (defaults to platform-specific account)
+    suffix          (Optional) Tail to append to test name (e.g., "t", "t1", "dev")
+                    Defaults to "t" if not specified
+    hpc_account     (Optional) HPC account to use (defaults to platform-specific account)
 
 OPTIONS:
     --help, -h      Show this help message
@@ -159,17 +160,20 @@ PLATFORM DETECTION:
     C96mx025_S2S
 
 EXAMPLES:
-    # Run single test case
-    $(basename "$0") C48_ATM t
+    # Run single test case (suffix defaults to "t")
+    $(basename "$0") C48_ATM
+
+    # Run single test case with custom suffix
+    $(basename "$0") C48_ATM t1
 
     # Run all test cases
-    $(basename "$0") all t1
+    $(basename "$0") all
 
     # Run specific test suites
-    $(basename "$0") G t        # GFS tests only
-    $(basename "$0") E t        # GEFS tests only
-    $(basename "$0") S t        # SFS tests only
-    $(basename "$0") C t        # GCAFS tests only
+    $(basename "$0") G         # GFS tests only (suffix defaults to "t")
+    $(basename "$0") E t       # GEFS tests only
+    $(basename "$0") S t       # SFS tests only
+    $(basename "$0") C t       # GCAFS tests only
 
     # Show this help
     $(basename "$0") --help
@@ -195,10 +199,10 @@ if [[ $# -eq 0 ]] || [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]]; then
     exit 0
 fi
 
-if [[ $# -lt 2 ]]; then
+if [[ $# -lt 1 ]]; then
   echo "Error: Insufficient arguments"
   echo ""
-  echo "Usage: $0 <test_name|all> <suffix> [hpc_account]"
+  echo "Usage: $0 <test_name|all|G|E|S|C> [suffix] [hpc_account]"
   echo "       $0 [--help|-h]"
   echo ""
   echo "Run '$0 --help' for detailed information"
@@ -206,7 +210,7 @@ if [[ $# -lt 2 ]]; then
 fi
 
 TEST_NAME="${1}"
-TEST_SUFFIX="${2}"
+TEST_SUFFIX="${2:-t}"  # Default to "t" if not provided
 HPC_ACCOUNT="${3:-${HPC_ACCOUNT_DEFAULT}}"
 
 # Detect global-workflow home directory
