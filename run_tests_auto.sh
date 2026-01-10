@@ -53,10 +53,39 @@ case "${MACHINE}" in
         ;;
 esac
 
-echo "Detected machine: ${MACHINE} (hostname: ${HOSTNAME})"
-echo "HOMEgfs: ${HOMEgfs}"
-echo "RUNTESTS: ${RUNTESTS}"
-echo ""
+###############################################################################
+# Function: setup_environment
+# Description: Set up the environment for the detected machine
+###############################################################################
+setup_environment() {
+  echo "Setting up environment for ${MACHINE}..."
+
+  # Source machine detection script
+  if [[ -f "${HOMEgfs}/ush/detect_machine.sh" ]]; then
+    source "${HOMEgfs}/ush/detect_machine.sh"
+    echo "Machine ID detected: ${MACHINE_ID}"
+  else
+    echo -e "${YELLOW}Warning: detect_machine.sh not found at ${HOMEgfs}/ush/detect_machine.sh${NC}"
+  fi
+
+  # Load modules if module command is available
+  if command -v module >/dev/null 2>&1; then
+    module use "${HOMEgfs}/modulefiles" 2>/dev/null || true
+    if [[ -n "${MACHINE_ID}" ]]; then
+      module load "module_gwsetup.${MACHINE_ID}" 2>/dev/null || true
+    fi
+  fi
+
+  # Source workflow setup
+  if [[ -f "${HOMEgfs}/dev/workflow/gw_setup.sh" ]]; then
+    source "${HOMEgfs}/dev/workflow/gw_setup.sh"
+    echo "Workflow environment setup completed"
+  else
+    echo -e "${YELLOW}Warning: gw_setup.sh not found at ${HOMEgfs}/dev/workflow/gw_setup.sh${NC}"
+  fi
+
+  echo ""
+}
 
 ###############################################################################
 # Function: show_help
@@ -300,14 +329,15 @@ add_crontab_entries() {
     fi
 
     # Escape special characters for sed
-    local exp_name_escaped=$(echo "${exp_name}" | sed 's/[[\.*^$/]/\\&/g')
+    local exp_name_escaped=$(echo "${exp_name}" | sed 's/\[/\\[/g; s/\]/\\]/g; s/\./\\./g; s/\*/\\*/g; s/\^/\\^/g; s/\$/\\$/g; s/\//\\\//g')
 
     # Check if this entry exists (active or commented)
     if grep -qF "${exp_name}" "${current_crontab}"; then
       # Check if it's commented out
-      if grep "^#.*${exp_name}" "${current_crontab}" > /dev/null 2>&1; then
+      if grep -q "^#.*${exp_name}" "${current_crontab}"; then
         echo -e "${YELLOW}  Uncommenting existing entry for ${exp_name}${NC}"
-        sed -i "s|^#\(.*${exp_name_escaped}.*\)$|\1|" "${current_crontab}"
+        # Use awk with variable to safely uncomment lines containing exp_name
+        awk -v name="$exp_name_escaped" '$0 ~ name && /^#/ {sub(/^#/, "")} {print}' "${current_crontab}" > "${current_crontab}.tmp" && mv "${current_crontab}.tmp" "${current_crontab}"
         updated=1
       else
         echo -e "${GREEN}  Entry for ${exp_name} already exists and is active${NC}"
@@ -398,6 +428,9 @@ display_summary() {
 # Main execution
 ###############################################################################
 main() {
+  # Set up environment first
+  setup_environment
+
   # Log the header to file
   {
     echo "=============================================================================="
