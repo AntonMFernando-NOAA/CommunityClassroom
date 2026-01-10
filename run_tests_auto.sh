@@ -60,10 +60,30 @@ esac
 setup_environment() {
   echo "Setting up environment for ${MACHINE}..."
 
-  # Source machine detection script
+  # Set MACHINE_ID based on detected machine
+  case "${MACHINE}" in
+    "wcoss2")
+      MACHINE_ID="wcoss2"
+      ;;
+    "hera")
+      MACHINE_ID="hera"
+      ;;
+    "gaea")
+      MACHINE_ID="gaea"
+      ;;
+    *)
+      MACHINE_ID=""
+      ;;
+  esac
+
+  # Source machine detection script if it exists
   if [[ -f "${HOMEgfs}/ush/detect_machine.sh" ]]; then
     source "${HOMEgfs}/ush/detect_machine.sh"
-    echo "Machine ID detected: ${MACHINE_ID}"
+    if [[ -n "${MACHINE_ID}" ]]; then
+      echo "Machine ID detected: ${MACHINE_ID}"
+    else
+      echo "Machine ID not detected by detect_machine.sh"
+    fi
   else
     echo -e "${YELLOW}Warning: detect_machine.sh not found at ${HOMEgfs}/ush/detect_machine.sh${NC}"
   fi
@@ -77,11 +97,11 @@ setup_environment() {
   fi
 
   # Source workflow setup
-  if [[ -f "${HOMEgfs}/dev/workflow/gw_setup.sh" ]]; then
-    source "${HOMEgfs}/dev/workflow/gw_setup.sh"
+  if [[ -f "${HOMEgfs}/dev/ush/gw_setup.sh" ]]; then
+    source "${HOMEgfs}/dev/ush/gw_setup.sh"
     echo "Workflow environment setup completed"
   else
-    echo -e "${YELLOW}Warning: gw_setup.sh not found at ${HOMEgfs}/dev/workflow/gw_setup.sh${NC}"
+    echo -e "${YELLOW}Warning: gw_setup.sh not found at ${HOMEgfs}/dev/ush/gw_setup.sh${NC}"
   fi
 
   echo ""
