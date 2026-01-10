@@ -4,10 +4,11 @@
 # Description: Automate running workflow tests using generate_workflows.sh
 #              and manage crontab entries for Rocoto workflows
 #
-# Usage: ./run_all_tests.sh <test_name|all> <suffix> [hpc_account]
+# Usage: ./run_all_tests.sh <test_name|all|G|E|S|C> <suffix> [hpc_account]
 #        test_name: specific test case name (e.g., C48_ATM) or "all" for all tests
+#                   or G/E/S/C for GFS/GEFS/SFS/GCAFS test suites
 #        suffix: tail to append to test name (e.g., "t", "t1", "dev")
-#        hpc_account: defaults to "fv3-cpu" if not provided
+#        hpc_account: defaults to platform-specific account
 #
 # Examples:
 #   ./run_all_tests.sh C48_ATM t        # Creates C48_ATM_t
@@ -125,7 +126,12 @@ DESCRIPTION:
     configures appropriate paths and test lists.
 
 ARGUMENTS:
-    test_name       Specific test case name (e.g., C48_ATM) or "all" for all tests
+    test_name       Specific test case name (e.g., C48_ATM) or test suite:
+                    - all: All available test cases
+                    - G/gfs: GFS test cases only
+                    - E/gefs: GEFS test cases only
+                    - S/sfs: SFS test cases only
+                    - C/gcafs: GCAFS test cases only
     suffix          Tail to append to test name (e.g., "t", "t1", "dev")
     hpc_account     HPC account to use (defaults to platform-specific account)
 
@@ -156,8 +162,14 @@ EXAMPLES:
     # Run single test case
     $(basename "$0") C48_ATM t
 
-    # Run all test cases with custom suffix and account
-    $(basename "$0") all t1 fv3-cpu
+    # Run all test cases
+    $(basename "$0") all t1
+
+    # Run specific test suites
+    $(basename "$0") G t        # GFS tests only
+    $(basename "$0") E t        # GEFS tests only
+    $(basename "$0") S t        # SFS tests only
+    $(basename "$0") C t        # GCAFS tests only
 
     # Show this help
     $(basename "$0") --help
@@ -211,6 +223,60 @@ LOG_FILE="${LOG_DIR}/run_all_tests.log"
 echo "Log file: ${LOG_FILE}"
 echo ""
 
+###############################################################################
+# Function: get_yaml_system
+# Description: Extract the 'net' field from a YAML file to determine system type
+# Arguments:
+#   $1 - YAML file path
+# Returns: system name (gfs, gefs, gcafs, sfs) or empty string if not found
+###############################################################################
+get_yaml_system() {
+  local yaml_file="${1}"
+  local system=""
+
+  # Extract the net field from the YAML
+  if [[ -f "${yaml_file}" ]]; then
+    system=$(grep -E '^  net:' "${yaml_file}" | sed 's/.*net:\s*//' | tr -d ' ')
+  fi
+
+  echo "${system}"
+}
+
+###############################################################################
+# Function: categorize_test_cases
+# Description: Categorize all available test cases by system type
+###############################################################################
+categorize_test_cases() {
+  GFS_TEST_CASES=()
+  GEFS_TEST_CASES=()
+  SFS_TEST_CASES=()
+  GCAFS_TEST_CASES=()
+
+  for test_case in "${ALL_TEST_CASES[@]}"; do
+    local yaml_file="${HOMEgfs}/dev/ci/cases/pr/${test_case}.yaml"
+    local system=$(get_yaml_system "${yaml_file}")
+
+    case "${system}" in
+      "gfs")
+        GFS_TEST_CASES+=("${test_case}")
+        ;;
+      "gefs")
+        GEFS_TEST_CASES+=("${test_case}")
+        ;;
+      "sfs")
+        SFS_TEST_CASES+=("${test_case}")
+        ;;
+      "gcafs")
+        GCAFS_TEST_CASES+=("${test_case}")
+        ;;
+      *)
+        # If system not recognized, add to GFS as default
+        GFS_TEST_CASES+=("${test_case}")
+        ;;
+    esac
+  done
+}
+
 # All available test cases
 ALL_TEST_CASES=(
   "C48_ATM"
@@ -237,21 +303,44 @@ if [[ "${MACHINE}" == "wcoss2" ]]; then
   ALL_TEST_CASES+=("C96_atm3DVar_extended")
 fi
 
+# Categorize test cases by system
+categorize_test_cases
+
 # Determine which tests to run
-if [[ "${TEST_NAME}" == "all" ]]; then
-  TEST_CASES=("${ALL_TEST_CASES[@]}")
-  echo "Running ALL test cases with suffix: ${TEST_SUFFIX}"
-else
-  # Validate test name exists in the list
-  if [[ " ${ALL_TEST_CASES[@]} " =~ " ${TEST_NAME} " ]]; then
-    TEST_CASES=("${TEST_NAME}")
-    echo "Running single test case: ${TEST_NAME} with suffix: ${TEST_SUFFIX}"
-  else
-    echo "Error: Test case '${TEST_NAME}' not found in available tests"
-    echo "Available tests: ${ALL_TEST_CASES[@]}"
-    exit 1
-  fi
-fi
+case "${TEST_NAME}" in
+  "all")
+    TEST_CASES=("${ALL_TEST_CASES[@]}")
+    echo "Running ALL test cases with suffix: ${TEST_SUFFIX}"
+    ;;
+  "G"|"gfs")
+    TEST_CASES=("${GFS_TEST_CASES[@]}")
+    echo "Running GFS test cases with suffix: ${TEST_SUFFIX}"
+    ;;
+  "E"|"gefs")
+    TEST_CASES=("${GEFS_TEST_CASES[@]}")
+    echo "Running GEFS test cases with suffix: ${TEST_SUFFIX}"
+    ;;
+  "S"|"sfs")
+    TEST_CASES=("${SFS_TEST_CASES[@]}")
+    echo "Running SFS test cases with suffix: ${TEST_SUFFIX}"
+    ;;
+  "C"|"gcafs")
+    TEST_CASES=("${GCAFS_TEST_CASES[@]}")
+    echo "Running GCAFS test cases with suffix: ${TEST_SUFFIX}"
+    ;;
+  *)
+    # Validate test name exists in the list
+    if [[ " ${ALL_TEST_CASES[@]} " =~ " ${TEST_NAME} " ]]; then
+      TEST_CASES=("${TEST_NAME}")
+      echo "Running single test case: ${TEST_NAME} with suffix: ${TEST_SUFFIX}"
+    else
+      echo "Error: Test case '${TEST_NAME}' not found in available tests"
+      echo "Available tests: ${ALL_TEST_CASES[@]}"
+      echo "Available test suites: G/gfs, E/gefs, S/sfs, C/gcafs, all"
+      exit 1
+    fi
+    ;;
+esac
 echo ""
 
 # Color codes for output
